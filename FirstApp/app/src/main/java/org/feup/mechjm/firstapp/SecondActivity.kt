@@ -8,10 +8,9 @@ class SecondActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tv = TextView(this)
-        tv.text = intent.getStringExtra(EXTRA_MESSAGE)
-        tv.textSize = 30.0F
+        setContentView(R.layout.activity_second)
 
-        setContentView(tv)
+        val tv = findViewById<TextView>(R.id.second_act_text)
+        tv.text = intent.getStringExtra(EXTRA_MESSAGE)
     }
 }
