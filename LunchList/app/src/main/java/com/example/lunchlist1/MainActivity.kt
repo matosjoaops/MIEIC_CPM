@@ -68,7 +68,9 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                 else -> null
             }
 
-            val restaurant = Restaurant(name, address, type)
+            val notes = findViewById<EditText>(R.id.edit_notes).text.toString()
+
+            val restaurant = Restaurant(name, address, type, notes)
 
             adapter.add(restaurant)
 

@@ -24,7 +24,8 @@
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -106,13 +107,34 @@
 
                 </TableRow>
 
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Notes:" />
+
+                    <EditText
+                        android:id="@+id/edit_notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:ems="10"
+                        android:inputType="textMultiLine|textPersonName"
+                        android:maxWidth="0dp"
+                        android:maxLines="2" />
+                </TableRow>
+
             </TableLayout>
 
             <Button
                 android:id="@+id/save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SAVE" />
+                android:text="save" />
 
         </LinearLayout>
 
