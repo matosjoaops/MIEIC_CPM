@@ -10,10 +10,17 @@ import android.view.ViewGroup
 import android.widget.*
 
 import android.widget.ArrayAdapter
+import com.google.android.material.tabs.TabLayout
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     val rests = arrayListOf<Restaurant>()
+    val tabs by lazy { findViewById<TabLayout>(R.id.tabs) }
+    val tab1 by lazy {findViewById<ListView>(R.id.rests_list)}
+    val tab2 by lazy {findViewById<LinearLayout>(R.id.form_layout)}
+    val listTab by lazy {tabs.newTab().setText("List")}
+    val detailsTab by lazy {tabs.newTab().setText("Details")}
+    val adapter by lazy { RestaurantAdapter() }
 
     inner class RestaurantAdapter: ArrayAdapter<Restaurant>(this@MainActivity, R.layout.row, rests) {
 
@@ -42,10 +49,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         setContentView(R.layout.activity_main)
 
-        //val adapter by lazy { ArrayAdapter(this, android.R.layout.simple_list_item_1, rests) }
-        val list = findViewById<ListView>(R.id.rests_list)
-        val adapter = RestaurantAdapter()
-        list.adapter = adapter
+        //val list = findViewById<ListView>(R.id.rests_list)
+
+        tabs.addTab(listTab)
+        tabs.addTab(detailsTab)
+        tabs.addOnTabSelectedListener(this)
 
         findViewById<Button>(R.id.save_btn).setOnClickListener{
             val name = findViewById<EditText>(R.id.edit_name).text.toString()
@@ -67,9 +75,12 @@ class MainActivity : AppCompatActivity() {
             //println(restaurant.name)
             //println(restaurant.address)
             //println(restaurant.type)
+            listTab.select()
         }
 
-        list.setOnItemClickListener { parent, view, position, id ->
+
+        tab1.adapter = adapter
+        tab1.setOnItemClickListener { parent, view, position, id ->
             val clickedRestaurant = adapter.getItem(position)
 
             findViewById<EditText>(R.id.edit_name).setText(clickedRestaurant?.name)
@@ -83,7 +94,26 @@ class MainActivity : AppCompatActivity() {
             }
 
             findViewById<RadioButton>(selectedRadioButtonId).isChecked = true
+            detailsTab.select()
         }
+        detailsTab.select()
+    }
 
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        when (tab?.position) {
+            0 -> tab1.visibility = View.VISIBLE
+            1 -> tab2.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+        when (tab?.position) {
+            0 -> tab1.visibility = View.INVISIBLE
+            1 -> tab2.visibility = View.INVISIBLE
+        }
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+        TODO("Not yet implemented")
     }
 }
