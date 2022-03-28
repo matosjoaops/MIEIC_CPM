@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 
 import android.widget.ArrayAdapter
@@ -21,6 +20,22 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     val listTab by lazy {tabs.newTab().setText("List")}
     val detailsTab by lazy {tabs.newTab().setText("Details")}
     val adapter by lazy { RestaurantAdapter() }
+    var current: Restaurant? = null
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.toast){
+            val message = current?.notes ?: "No restaurant selected"
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        MenuInflater(this).inflate(R.menu.main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
     inner class RestaurantAdapter: ArrayAdapter<Restaurant>(this@MainActivity, R.layout.row, rests) {
 
@@ -74,6 +89,8 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
             adapter.add(restaurant)
 
+            current = restaurant
+
             //println(restaurant.name)
             //println(restaurant.address)
             //println(restaurant.type)
@@ -96,6 +113,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             }
 
             findViewById<RadioButton>(selectedRadioButtonId).isChecked = true
+            current = clickedRestaurant
             detailsTab.select()
         }
         detailsTab.select()
