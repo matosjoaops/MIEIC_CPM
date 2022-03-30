@@ -13,7 +13,7 @@ import com.google.android.material.tabs.TabLayout
 
 
 class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
-    val rests = arrayListOf<Restaurant>()
+    var rests = arrayListOf<Restaurant>()
     val tabs by lazy { findViewById<TabLayout>(R.id.tabs) }
     val tab1 by lazy {findViewById<ListView>(R.id.rests_list)}
     val tab2 by lazy {findViewById<LinearLayout>(R.id.form_layout)}
@@ -21,6 +21,16 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     val detailsTab by lazy {tabs.newTab().setText("Details")}
     val adapter by lazy { RestaurantAdapter() }
     var current: Restaurant? = null
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable("current", current)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        current = savedInstanceState.getSerializable("current") as Restaurant
+        super.onRestoreInstanceState(savedInstanceState)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.toast){
