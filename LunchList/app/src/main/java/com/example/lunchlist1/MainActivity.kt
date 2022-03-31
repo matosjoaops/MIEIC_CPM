@@ -21,6 +21,13 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     val detailsTab by lazy {tabs.newTab().setText("Details")}
     val adapter by lazy { RestaurantAdapter() }
     var current: Restaurant? = null
+    val dbHelper by lazy { RestaurantHelper(this) }
+    var currentId: Long = 0
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable("current", current)
@@ -90,7 +97,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                 "Take-Out" -> RestaurantType.TAKEOUT
                 "Sit-Down" -> RestaurantType.SITDOWN
                 "Delivery" -> RestaurantType.DELIVERY
-                else -> null
+                else -> RestaurantType.DELIVERY
             }
 
             val notes = findViewById<EditText>(R.id.edit_notes).text.toString()
@@ -99,7 +106,16 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
             adapter.add(restaurant)
 
+
+            if (current == null) currentId = dbHelper.insert(name, address, type, notes)
+            else {
+                dbHelper.update(currentId.toString(), name, address, type, notes)
+                //finish()
+            }
+
             current = restaurant
+
+
 
             //println(restaurant.name)
             //println(restaurant.address)
